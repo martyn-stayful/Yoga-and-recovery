@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Back Recovery — 28 Day Programme</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e8edf3 100%);
+    color: #2c3e50;
+    min-height: 100vh;
+    padding: 20px;
+    line-height: 1.5;
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+  header {
+    background: linear-gradient(135deg, #5b8def 0%, #7d6ce0 100%);
+    color: white;
+    padding: 24px 28px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(91,141,239,0.25);
+  }
+  header h1 { font-size: 1.6em; margin-bottom: 4px; }
+  header p { opacity: 0.9; font-size: 0.95em; }
+  .stats {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    background: rgba(255,255,255,0.2);
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 0.9em;
+  }
+  .stat strong { display: block; font-size: 1.3em; }
+
+  nav.tabs {
+    display: flex;
+    background: white;
+    border-radius: 12px;
+    padding: 6px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    gap: 4px;
+  }
+  nav.tabs button {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 10px 8px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: 600;
+    color: #6b7a8f;
+    font-size: 0.92em;
+    transition: all 0.2s;
+  }
+  nav.tabs button.active {
+    background: #5b8def;
+    color: white;
+  }
+  nav.tabs button:hover:not(.active) { background: #f0f3f8; }
+
+  .day-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    padding: 14px 18px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+  .day-nav button {
+    background: #f0f3f8;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.2em;
+    color: #5b8def;
+    transition: all 0.15s;
+  }
+  .day-nav button:hover:not(:disabled) { background: #5b8def; color: white; }
+  .day-nav button:disabled { opacity: 0.3; cursor: not-allowed; }
+  .day-info { text-align: center; flex: 1; }
+  .day-info h2 { font-size: 1.3em; }
+  .phase-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75em;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+  .phase-1 { background: #d4f1d4; color: #2d6a2d; }
+  .phase-2 { background: #fff3d4; color: #8a6d1f; }
+  .phase-3 { background: #d4e6ff; color: #1f4f8a; }
+  .phase-4 { background: #f0d4ff; color: #6b1f8a; }
+
+  .progress-bar {
+    height: 6px;
+    background: #e8edf3;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #5b8def, #7d6ce0);
+    transition: width 0.4s;
+  }
+
+  .section-title {
+    font-size: 0.85em;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #6b7a8f;
+    letter-spacing: 0.5px;
+    margin: 20px 0 10px 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title .badge {
+    background: #ffe5d4;
+    color: #b8702a;
+    font-size: 0.78em;
+    padding: 2px 8px;
+    border-radius: 10px;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .section-title .badge.done {
+    background: #d4f1d4;
+    color: #2d6a2d;
+  }
+
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+  }
+  .card.checked {
+    background: #f4f9f4;
+    border-color: #c8e6c8;
+  }
+  .checkbox {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid #d0d8e0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    margin-top: 2px;
+  }
+  .checkbox:hover { border-color: #5b8def; }
+  .checkbox.checked {
+    background: #4caf50;
+    border-color: #4caf50;
+  }
+  .checkbox.checked::after {
+    content: '\2713';
+    color: white;
+    font-weight: bold;
+    font-size: 0.95em;
+  }
+  .card-content { flex: 1; min-width: 0; }
+  .card-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .card-desc {
+    font-size: 0.9em;
+    color: #4a5868;
+    margin-bottom: 8px;
+  }
+  .video-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .play-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #5b8def;
+    color: white;
+    border: none;
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 0.85em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .play-btn:hover { background: #4a7adf; }
+  .video-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #fff0f0;
+    color: #d04848;
+    padding: 5px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.82em;
+    font-weight: 600;
+    transition: all 0.15s;
+  }
+  .video-link:hover { background: #d04848; color: white; }
+  .video-embed {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    margin-top: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #000;
+  }
+  .video-embed iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .warning {
+    background: #fff5f0;
+    color: #b04848;
+    padding: 5px 9px;
+    border-radius: 6px;
+    font-size: 0.75em;
+    font-weight: 600;
+    border: 1px solid #f5d8c8;
+  }
+
+  /* CHECK-IN CARDS */
+  .checkin-card {
+    background: white;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .checkin-card.morning { border-left: 4px solid #f0c060; }
+  .checkin-card.evening { border-left: 4px solid #7d6ce0; }
+  .checkin-card.complete { background: #f4f9f4; border-color: #c8e6c8; }
+  .checkin-card .checkin-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .checkin-card .checkin-header h3 {
+    font-size: 1.05em;
+  }
+  .checkin-status {
+    font-size: 0.78em;
+    padding: 3px 9px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+  .checkin-status.pending { background: #ffe5d4; color: #b8702a; }
+  .checkin-status.done { background: #d4f1d4; color: #2d6a2d; }
+  .checkin-form { display: none; margin-top: 10px; }
+  .checkin-form.open { display: block; }
+  .checkin-summary {
+    font-size: 0.88em;
+    color: #4a5868;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+  }
+  .checkin-summary span { white-space: nowrap; }
+  .metric-row {
+    margin-bottom: 14px;
+  }
+  .metric-row label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.92em;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 6px;
+  }
+  .metric-row label .value {
+    background: #5b8def;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    min-width: 36px;
+    text-align: center;
+  }
+  .metric-row input[type="range"] {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    appearance: none;
+    -webkit-appearance: none;
+    background: linear-gradient(90deg, #4caf50 0%, #f0c060 50%, #e08080 100%);
+    outline: none;
+    cursor: pointer;
+  }
+  .metric-row input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid #5b8def;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  }
+  .metric-row input[type="range"]::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid #5b8def;
+    cursor: pointer;
+  }
+  .metric-row.reverse input[type="range"] {
+    background: linear-gradient(90deg, #e08080 0%, #f0c060 50%, #4caf50 100%);
+  }
+  .scale-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72em;
+    color: #8a96a8;
+    margin-top: 3px;
+  }
+  .checkin-textarea {
+    width: 100%;
+    border: 1px solid #e0e6ee;
+    border-radius: 8px;
+    padding: 10px;
+    font-family: inherit;
+    font-size: 0.9em;
+    resize: vertical;
+    min-height: 60px;
+  }
+  .checkin-textarea:focus { outline: none; border-color: #5b8def; }
+  .save-checkin-btn {
+    background: #5b8def;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+  }
+  .save-checkin-btn:hover { background: #4a7adf; }
+  .checkin-toggle-btn {
+    background: #f0f3f8;
+    color: #5b8def;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.85em;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .checkin-toggle-btn:hover { background: #e0e6ee; }
+
+  /* OVERVIEW */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+  .overview-day {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    transition: all 0.15s;
+    font-size: 0.85em;
+    border: 2px solid transparent;
+  }
+  .overview-day:hover { transform: translateY(-2px); }
+  .overview-day.current { border-color: #5b8def; }
+  .overview-day .day-num { font-weight: 700; color: #2c3e50; }
+  .overview-day .day-progress {
+    font-size: 0.7em;
+    color: #6b7a8f;
+    margin-top: 2px;
+  }
+  .overview-day.complete { background: #d4f1d4; }
+  .overview-day.complete .day-progress { color: #2d6a2d; font-weight: 600; }
+
+  .phase-summary {
+    background: white;
+    padding: 16px 18px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border-left: 4px solid #5b8def;
+  }
+  .phase-summary h4 { margin-bottom: 6px; }
+  .phase-summary p { font-size: 0.9em; color: #4a5868; }
+
+  /* PROGRESS TAB */
+  .progress-card {
+    background: white;
+    padding: 18px;
+    border-radius: 12px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .progress-card h3 { margin-bottom: 4px; font-size: 1.1em; }
+  .progress-card .subtitle { font-size: 0.85em; color: #6b7a8f; margin-bottom: 14px; }
+  .insight-box {
+    background: #f5f8ff;
+    border-left: 4px solid #5b8def;
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 0.92em;
+    color: #2c3e50;
+  }
+  .insight-box.positive { background: #f0faf0; border-left-color: #4caf50; }
+  .insight-box.warning { background: #fff8f0; border-left-color: #f0a060; }
+  .insight-box strong { display: block; margin-bottom: 3px; color: #1c2c40; }
+  .empty-state {
+    text-align: center;
+    padding: 30px 16px;
+    color: #8a96a8;
+    font-size: 0.92em;
+  }
+  .summary-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .summary-stat {
+    background: #f5f8ff;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .summary-stat .label { font-size: 0.75em; color: #6b7a8f; text-transform: uppercase; letter-spacing: 0.4px; }
+  .summary-stat .value { font-size: 1.6em; font-weight: 700; color: #2c3e50; margin: 4px 0 2px; }
+  .summary-stat .change { font-size: 0.78em; font-weight: 600; }
+  .summary-stat .change.improving { color: #4caf50; }
+  .summary-stat .change.worsening { color: #d04848; }
+  .summary-stat .change.flat { color: #8a96a8; }
+  svg.chart {
+    width: 100%;
+    height: 220px;
+    overflow: visible;
+  }
+  .chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 10px;
+    font-size: 0.82em;
+  }
+  .chart-legend .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #4a5868;
+  }
+  .chart-legend .swatch {
+    width: 12px;
+    height: 3px;
+    border-radius: 1px;
+  }
+
+  /* TIPS */
+  .tip-card {
+    background: white;
+    padding: 16px 18px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .tip-card h4 { margin-bottom: 8px; color: #2c3e50; }
+  .tip-card p { font-size: 0.92em; color: #4a5868; margin-bottom: 6px; }
+  .tip-card ul { margin-left: 18px; font-size: 0.92em; color: #4a5868; }
+  .tip-card li { margin-bottom: 4px; }
+  .tip-card.flare { border-left: 4px solid #e08080; }
+  .tip-card.morning-stiff { border-left: 4px solid #f0c060; }
+  .tip-card.heat { border-left: 4px solid #d08060; }
+  .tip-card.note { border-left: 4px solid #5b8def; background: #f5f8ff; }
+
+  .reset-btn {
+    display: block;
+    margin: 30px auto 0;
+    background: white;
+    border: 1px solid #e0e6ee;
+    color: #8a8a8a;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.85em;
+    cursor: pointer;
+  }
+  .reset-btn:hover { background: #fff0f0; color: #d04848; border-color: #f5c8c8; }
+
+  .save-indicator {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #4caf50;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 0.85em;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s;
+    pointer-events: none;
+    z-index: 100;
+  }
+  .save-indicator.show { opacity: 1; transform: translateY(0); }
+
+  .hidden { display: none; }
+
+  @media (max-width: 600px) {
+    body { padding: 12px; }
+    header { padding: 18px 20px; }
+    header h1 { font-size: 1.3em; }
+    .day-info h2 { font-size: 1.05em; }
+    nav.tabs button { padding: 8px 4px; font-size: 0.78em; }
+    .overview-grid { grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    .overview-day { font-size: 0.7em; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>🌿 Back Recovery Programme</h1>
+    <p>28-day progressive plan for chronic mid-back recovery</p>
+    <div class="stats">
+      <div class="stat"><strong id="stat-day">1</strong>Current day</div>
+      <div class="stat"><strong id="stat-streak">0</strong>Day streak</div>
+      <div class="stat"><strong id="stat-complete">0%</strong>Today's progress</div>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="active" data-tab="today">Today</button>
+    <button data-tab="overview">Overview</button>
+    <button data-tab="progress">Progress</button>
+    <button data-tab="tips">Tips</button>
+  </nav>
+
+  <div id="tab-today">
+    <div class="day-nav">
+      <button id="prev-day">&larr;</button>
+      <div class="day-info">
+        <h2 id="day-title">Day 1 of 28</h2>
+        <span class="phase-badge phase-1" id="phase-badge">Phase 1 · Gentle relief</span>
+        <div class="progress-bar"><div class="progress-fill" id="day-progress" style="width:0%"></div></div>
+      </div>
+      <button id="next-day">&rarr;</button>
+    </div>
+
+    <div id="activities-container"></div>
+
+    <button class="reset-btn" id="reset-btn">Reset all progress</button>
+  </div>
+
+  <div id="tab-overview" class="hidden">
+    <h3 style="margin-bottom:12px; color:#2c3e50;">28-day journey</h3>
+    <div class="overview-grid" id="overview-grid"></div>
+
+    <h3 style="margin: 20px 0 12px; color:#2c3e50;">Phase progression</h3>
+    <div class="phase-summary" style="border-left-color:#7ec07e;">
+      <h4>Phase 1 · Days 1–7 · Gentle relief</h4>
+      <p>Settling the protective bracing. Focus: lateral breathing, supported movement, restorative yoga, gentle TA activation.</p>
+    </div>
+    <div class="phase-summary" style="border-left-color:#e0c060;">
+      <h4>Phase 2 · Days 8–14 · Controlled movement</h4>
+      <p>Reintroducing rotation and extension within tolerance. Dead bugs and bird-dog prep, more active yoga, longer walks.</p>
+    </div>
+    <div class="phase-summary" style="border-left-color:#5b8def;">
+      <h4>Phase 3 · Days 15–21 · Active stability</h4>
+      <p>Building deep core endurance. Bird-dog, side plank prep, foam roller, strength-based vinyasa-lite.</p>
+    </div>
+    <div class="phase-summary" style="border-left-color:#a070d0;">
+      <h4>Phase 4 · Days 22–28 · Progressive strength</h4>
+      <p>Integrating strength under load. Full plank, side plank, loaded rotation, full vinyasa flow.</p>
+    </div>
+  </div>
+
+  <div id="tab-progress" class="hidden">
+    <div id="progress-content"></div>
+  </div>
+
+  <div id="tab-tips" class="hidden">
+    <div class="tip-card note">
+      <h4>📋 How this programme is structured</h4>
+      <p>Yoga is in the <strong>morning</strong> to mobilise after overnight stiffness. Tennis ball release, core work and walking sit through the day. Stretches are in the <strong>evening</strong>, and the <strong>heat pack before bed</strong> is the final calming input to settle the nervous system for sleep.</p>
+      <p><strong>Daily check-ins:</strong> the morning check-in (after waking, before yoga) and evening check-in (before bed) take 30 seconds each. They're how the Progress tab learns what's working.</p>
+      <p>All progress saves automatically. Close the app and return any time — your ticks, ratings, current day, and streak will all be there.</p>
+    </div>
+
+    <div class="tip-card morning-stiff">
+      <h4>🌅 Morning stiffness add-on (2 minutes in bed)</h4>
+      <p>Before getting out of bed:</p>
+      <ul>
+        <li>10 slow lateral breaths (breathe wide into rib sides, not up)</li>
+        <li>Knees-to-chest, hold 30 seconds</li>
+        <li>Gentle knees side-to-side rocking, 10 each way</li>
+      </ul>
+      <p style="margin-top:6px;">This warms the costovertebral joints before any load is placed on them.</p>
+    </div>
+
+    <div class="tip-card heat">
+      <h4>🔥 Heat protocol</h4>
+      <p>Heat is one of the most effective tools for chronic muscle bracing. It increases blood flow, reduces guarding, and calms the sympathetic nervous system.</p>
+      <ul>
+        <li><strong>Before bed (in the checklist):</strong> 15–20 mins on the mid-back, lying down</li>
+        <li><strong>Optional second session:</strong> mid-afternoon if sitting has wound things up</li>
+        <li>Microwaveable wheat bag, hot water bottle, or electric pad — all fine</li>
+        <li>Always with a layer of fabric between heat and skin</li>
+      </ul>
+    </div>
+
+    <div class="tip-card flare">
+      <h4>⚠️ Flare day protocol</h4>
+      <p>If pain flares or you've had a bad night, scale right back. Do <strong>only</strong>:</p>
+      <ul>
+        <li>5 minutes of lateral breathing (lying down)</li>
+        <li>10-minute gentle walk</li>
+        <li>Heat pack before bed</li>
+      </ul>
+      <p style="margin-top:6px;">Skip the yoga, stretches, tennis ball and core. Tick off what you do — partial counts. Still do the check-ins — flare data is useful data.</p>
+    </div>
+
+    <div class="tip-card">
+      <h4>🎾 Tennis ball technique (mid-back)</h4>
+      <p>Lie on the floor with one or two tennis balls placed <strong>either side of the spine</strong> (never directly on the spine itself) at the level of your bra strap or just below. Roll up to the base of the shoulder blades and back down slowly. Pause on tender spots for 20–30 seconds and breathe into them.</p>
+      <p>Spend 3–5 minutes total depending on phase. Stop earlier if it's reproducing the sharp pain — that's the joint, not muscle.</p>
+    </div>
+
+    <div class="tip-card">
+      <h4>💪 Why core work matters here</h4>
+      <p>The mid-back joints work harder when the deep core (transverse abdominis, obliques) isn't doing its job. The chronic muscle bracing you feel is partly the back compensating. As the deep core strengthens, the bracing reduces.</p>
+      <p>Quality over quantity — these are <strong>not</strong> ab workouts. The whole point is keeping the back quiet while the deep core fires.</p>
+    </div>
+
+    <div class="tip-card">
+      <h4>💺 Sitting trigger management</h4>
+      <p>If sitting aggravates it:</p>
+      <ul>
+        <li>Set a timer for every 30 minutes — stand and do 5 lateral breaths</li>
+        <li>Roll a small towel and place it horizontally behind the mid-back at desk</li>
+        <li>Avoid the "C" slumped shape — bring chest tall, ribs over hips</li>
+      </ul>
+    </div>
+
+    <div class="tip-card">
+      <h4>🌬️ Hourly breathing reset (do this all day)</h4>
+      <p>Once an hour: 5 slow lateral breaths. 30 seconds. Mobilises the costovertebral joints continuously and prevents the bracing from re-locking.</p>
+    </div>
+
+    <div class="tip-card">
+      <h4>🛏️ Sleep position</h4>
+      <p>Side-lying with a pillow between knees, hugging a second pillow at chest height (keeps the rib cage open). Avoid sleeping on your front.</p>
+    </div>
+
+    <div class="tip-card flare">
+      <h4>🚨 When to see a professional</h4>
+      <p>Talk to a GP or physiotherapist if you experience:</p>
+      <ul>
+        <li>Pain radiating around the rib cage to the front</li>
+        <li>Pain with deep breaths that's getting worse, not better</li>
+        <li>Numbness, tingling, or weakness anywhere</li>
+        <li>No improvement after 2 weeks of consistent work</li>
+        <li>Sharp pain that's increasing in frequency or intensity</li>
+      </ul>
+      <p style="margin-top:6px;">This programme supports professional care — it doesn't replace it.</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="save-indicator" id="save-indicator">✓ Saved</div>
+
+<script>
+const phases = [
+  { name: 'Gentle relief', cls: 'phase-1', range: [1,7] },
+  { name: 'Controlled movement', cls: 'phase-2', range: [8,14] },
+  { name: 'Active stability', cls: 'phase-3', range: [15,21] },
+  { name: 'Progressive strength', cls: 'phase-4', range: [22,28] }
+];
+
+function getPhase(day) {
+  return phases.find(p => day >= p.range[0] && day <= p.range[1]);
+}
+function phaseIndex(day) {
+  const p = getPhase(day);
+  return phases.indexOf(p) + 1;
+}
+
+const yogaSessions = {
+  1: { title: '20 min · Yoga for upper back pain', desc: 'Yoga With Adriene · gentle all-levels sequence creating space and relief for the upper back. Tap "Play guided session" to do it right here in the app.', videoId: 'd6zJkHcjbWc', fallback: 'https://www.youtube.com/watch?v=d6zJkHcjbWc' },
+  2: { title: '20 min · Gentle morning yoga', desc: 'Yoga With Adriene · gentle morning practice connecting to muscles, joints and breath. Slightly more movement, still kind to the body.', videoId: '8RnZjTubnhk', fallback: 'https://www.youtube.com/watch?v=8RnZjTubnhk' },
+  3: { title: '20 min · Yoga flow vinyasa', desc: 'Yoga With Adriene · marrying breath with movement in a slightly more active flow. Building stability and confidence as the body settles.', videoId: 'xmeNZI8inWI', fallback: 'https://www.youtube.com/watch?v=xmeNZI8inWI' },
+  4: { title: '20 min · Intermediate power yoga', desc: 'Yoga With Adriene · full-body power flow building strength while regulating the nervous system through breath. The graduation week.', videoId: 'ZbtVVYBLCug', fallback: 'https://www.youtube.com/watch?v=ZbtVVYBLCug' }
+};
+
+const tennisBallRelease = {
+  1: { title: 'Tennis ball release · gentle', desc: 'Lie on two tennis balls placed either side of the spine at mid-back level. Stay still on each spot for 30 seconds, breathing slowly. 3 minutes total. Avoid pressing on the spine itself.', videoId: 'cDVbPRl5sKE', fallback: 'https://www.youtube.com/results?search_query=tennis+ball+release+thoracic+spine' },
+  2: { title: 'Tennis ball release · with movement', desc: 'Same setup — balls either side of spine. Slowly roll up and down 2 inches over each spot. Pause on tender spots. 4 minutes total.', videoId: 'cDVbPRl5sKE', fallback: 'https://www.youtube.com/results?search_query=tennis+ball+self+massage+upper+back' },
+  3: { title: 'Tennis ball release · with arm movement', desc: 'Place balls under mid-back. As you press into them, raise arms overhead and lower. The movement helps mobilise the rib joints. 4–5 minutes.', videoId: 'cDVbPRl5sKE', fallback: 'https://www.youtube.com/results?search_query=tennis+ball+release+thoracic+arm+movement' },
+  4: { title: 'Tennis ball release · full mid-upper back', desc: 'Cover the full mid-back through to base of shoulder blades. Combine static holds with arm raises and gentle rotations. 5 minutes.', videoId: 'cDVbPRl5sKE', fallback: 'https://www.youtube.com/results?search_query=tennis+ball+myofascial+release+upper+back' }
+};
+
+const coreWork = {
+  1: { title: 'Deep core activation', desc: 'Lying on back, knees bent. 10 slow transverse abdominis activations. Then 8 pelvic tilts. Very gentle — no crunches.', videoId: 'lh-gBQK_RDA', fallback: 'https://www.youtube.com/results?search_query=transverse+abdominis+activation+for+back+pain' },
+  2: { title: 'Dead bug · beginner', desc: '2 sets of 8 reps each side. Lie on back, arms up, knees bent at 90°. Slowly extend opposite arm and leg, keeping low back flat.', videoId: 'g_BYB0R-4Ws', fallback: 'https://www.youtube.com/results?search_query=dead+bug+exercise+for+beginners' },
+  3: { title: 'Bird-dog · core focus', desc: '2 sets of 10 reps each side. On hands and knees, extend opposite arm and leg slowly. Keep ribs down, hips level. Hold each rep for 3 seconds.', videoId: 'wiFNA3sqjCA', fallback: 'https://www.youtube.com/results?search_query=bird+dog+exercise+proper+form' },
+  4: { title: 'Plank progression + side plank', desc: 'Front plank: 3 × 30 seconds. Side plank from knees: 2 × 20 seconds each side. Stop if mid-back pain provoked.', videoId: 'pSHjTRCQxIw', fallback: 'https://www.youtube.com/results?search_query=plank+side+plank+progression+for+core' }
+};
+
+const stretches = {
+  1: [
+    { title: 'Lateral breathing', desc: 'Lie on back with hands on side ribs. 10 slow breaths expanding ribs sideways into your hands.', videoId: 'CnB_cI6FF4Y', fallback: 'https://www.youtube.com/results?search_query=lateral+rib+breathing+exercise', warning: false },
+    { title: 'Cat-cow', desc: '10 slow rounds. Move with breath. Stay within comfortable range — no pushing.', videoId: 'kqnua4rHVVA', fallback: 'https://www.youtube.com/results?search_query=cat+cow+stretch+for+back', warning: false },
+    { title: 'Supported child\'s pose', desc: 'Hold for 90 seconds. Use a pillow under chest if needed. Breathe wide into the back.', videoId: 'eqVMAPM00DM', fallback: 'https://www.youtube.com/results?search_query=supported+childs+pose+for+back+pain', warning: false }
+  ],
+  2: [
+    { title: 'Lateral breathing', desc: '10 slow breaths expanding ribs sideways. Continue making this a daily anchor habit.', videoId: 'CnB_cI6FF4Y', fallback: 'https://www.youtube.com/results?search_query=lateral+rib+breathing+exercise', warning: false },
+    { title: 'Thread the needle', desc: '5 reps each side, hold each for 20 seconds. Gentle thoracic rotation from hands and knees.', videoId: 'EtGiVl9176Y', fallback: 'https://www.youtube.com/results?search_query=thread+the+needle+stretch', warning: true },
+    { title: 'Doorway chest opener', desc: 'Each arm 30 seconds. Opens the front line which pulls bilaterally on the mid-back.', videoId: 'SJ5Q8aR_9Hk', fallback: 'https://www.youtube.com/results?search_query=doorway+chest+opener+stretch', warning: false }
+  ],
+  3: [
+    { title: 'Lateral breathing', desc: '10 slow breaths expanding ribs sideways. Keep this anchor habit.', videoId: 'CnB_cI6FF4Y', fallback: 'https://www.youtube.com/results?search_query=lateral+rib+breathing+exercise', warning: false },
+    { title: 'Half-kneeling thoracic rotation', desc: '8 reps each side. Slow and controlled, finding range without forcing.', videoId: 'IKtOSDr8d5o', fallback: 'https://www.youtube.com/results?search_query=half+kneeling+thoracic+rotation', warning: true },
+    { title: 'Foam roller thoracic extension', desc: 'Foam roller across mid-back, hands behind head, gently arch over. 5 reps moving roller up 2 inches each time.', videoId: 'LmIgZ5kF3Wk', fallback: 'https://www.youtube.com/results?search_query=foam+roller+thoracic+extension', warning: true }
+  ],
+  4: [
+    { title: 'Lateral breathing', desc: '10 slow breaths expanding ribs sideways. Lifelong habit at this point.', videoId: 'CnB_cI6FF4Y', fallback: 'https://www.youtube.com/results?search_query=lateral+rib+breathing+exercise', warning: false },
+    { title: 'Open book rotation', desc: '8 reps each side. Side-lying rotation with knees stacked. Eyes follow the moving hand.', videoId: 'EJ3Kd5fXjGE', fallback: 'https://www.youtube.com/results?search_query=open+book+rotation+stretch', warning: false },
+    { title: 'Quadruped extension-rotation', desc: '8 reps each side. Hand behind head, rotate elbow up to ceiling and down through the gap.', videoId: 'IxocHv5yWpo', fallback: 'https://www.youtube.com/results?search_query=thoracic+extension+rotation+quadruped', warning: true }
+  ]
+};
+
+const walks = {
+  1: { title: '10 min easy walk', desc: 'Daytime, comfortable pace. Breathe through the nose. Gets gentle joint circulation going.' },
+  2: { title: '15 min walk', desc: 'Daytime, slightly brisker. Arms can swing naturally — don\'t hold them stiff.' },
+  3: { title: '20 min walk', desc: 'Daytime brisk walk. If hills are around, include some gentle inclines.' },
+  4: { title: '25 min walk', desc: 'Daytime brisk walk. Posture cue: tall through the crown of the head, ribs over hips.' }
+};
+
+function buildDay(dayNum) {
+  const idx = phaseIndex(dayNum);
+  return [
+    { id: 'yoga', tag: 'morning', ...yogaSessions[idx] },
+    { id: 'tennis', tag: 'midday', ...tennisBallRelease[idx] },
+    { id: 'core', tag: 'afternoon', ...coreWork[idx] },
+    { id: 'walk', tag: 'anytime', ...walks[idx] },
+    { id: 'stretch1', tag: 'evening', ...stretches[idx][0] },
+    { id: 'stretch2', tag: 'evening', ...stretches[idx][1] },
+    { id: 'stretch3', tag: 'evening', ...stretches[idx][2] },
+    { id: 'heat', tag: 'bed', title: 'Heat pack · 15–20 minutes', desc: 'Lie down with heat pack on mid-back. Last input of the day — calms the nervous system before sleep.' }
+  ];
+}
+
+// ===== STATE =====
+const STORAGE_KEYS = {
+  day: 'backRecovery_currentDay',
+  progress: 'backRecovery_progress',
+  checkins: 'backRecovery_checkins',
+  startDate: 'backRecovery_startDate'
+};
+
+let currentDay = 1;
+let progress = {};
+let checkins = {}; // { 1: { morning: {pain, mood, stiffness, sleep, notes, ts}, evening: {pain, mood, stiffness, notes, ts} } }
+let startDate = null;
+let openVideos = {};
+let openCheckins = {}; // {'1-morning': true} for editing UI state
+
+function showSavedIndicator() {
+  const ind = document.getElementById('save-indicator');
+  ind.classList.add('show');
+  clearTimeout(ind._t);
+  ind._t = setTimeout(() => ind.classList.remove('show'), 1200);
+}
+
+function loadState() {
+  try {
+    const d = localStorage.getItem(STORAGE_KEYS.day);
+    if (d !== null) {
+      const parsed = parseInt(d);
+      if (!isNaN(parsed) && parsed >= 1 && parsed <= 28) currentDay = parsed;
+    }
+  } catch(e) {}
+  try {
+    const p = localStorage.getItem(STORAGE_KEYS.progress);
+    if (p) progress = JSON.parse(p) || {};
+  } catch(e) { progress = {}; }
+  try {
+    const c = localStorage.getItem(STORAGE_KEYS.checkins);
+    if (c) checkins = JSON.parse(c) || {};
+  } catch(e) { checkins = {}; }
+  try {
+    const sd = localStorage.getItem(STORAGE_KEYS.startDate);
+    if (sd) startDate = sd;
+    else {
+      startDate = new Date().toISOString();
+      localStorage.setItem(STORAGE_KEYS.startDate, startDate);
+    }
+  } catch(e) {}
+}
+
+function saveDay() { try { localStorage.setItem(STORAGE_KEYS.day, String(currentDay)); showSavedIndicator(); } catch(e) {} }
+function saveProgress() { try { localStorage.setItem(STORAGE_KEYS.progress, JSON.stringify(progress)); showSavedIndicator(); } catch(e) {} }
+function saveCheckins() { try { localStorage.setItem(STORAGE_KEYS.checkins, JSON.stringify(checkins)); showSavedIndicator(); } catch(e) {} }
+
+// ===== RENDER TODAY =====
+function render() {
+  const phase = getPhase(currentDay);
+  document.getElementById('day-title').textContent = 'Day ' + currentDay + ' of 28';
+  const badge = document.getElementById('phase-badge');
+  badge.className = 'phase-badge ' + phase.cls;
+  badge.textContent = 'Phase ' + phaseIndex(currentDay) + ' · ' + phase.name;
+
+  document.getElementById('prev-day').disabled = currentDay === 1;
+  document.getElementById('next-day').disabled = currentDay === 28;
+
+  const activities = buildDay(currentDay);
+  const dayProg = progress[currentDay] || {};
+  const completedCount = activities.filter(a => dayProg[a.id]).length;
+  const pct = Math.round((completedCount / activities.length) * 100);
+
+  document.getElementById('day-progress').style.width = pct + '%';
+  document.getElementById('stat-day').textContent = currentDay;
+  document.getElementById('stat-complete').textContent = pct + '%';
+
+  let streak = 0;
+  for (let d = 1; d <= 28; d++) {
+    const dp = progress[d] || {};
+    const acts = buildDay(d);
+    if (acts.every(a => dp[a.id])) streak++;
+    else break;
+  }
+  document.getElementById('stat-streak').textContent = streak;
+
+  const container = document.getElementById('activities-container');
+  container.innerHTML = '';
+
+  // ----- MORNING CHECK-IN -----
+  container.appendChild(buildCheckinCard('morning'));
+
+  // ----- ACTIVITY SECTIONS -----
+  const sections = [
+    { title: '🌅 Morning', items: activities.filter(a => a.tag === 'morning') },
+    { title: '☀️ Through the day', items: activities.filter(a => a.tag === 'midday' || a.tag === 'afternoon' || a.tag === 'anytime') },
+    { title: '🌆 Evening', items: activities.filter(a => a.tag === 'evening') },
+    { title: '🛏️ Before bed', items: activities.filter(a => a.tag === 'bed') }
+  ];
+  sections.forEach(sec => {
+    if (sec.items.length === 0) return;
+    const h = document.createElement('div');
+    h.className = 'section-title';
+    h.textContent = sec.title;
+    container.appendChild(h);
+    sec.items.forEach(act => {
+      const checked = (progress[currentDay] || {})[act.id];
+      const card = document.createElement('div');
+      card.className = 'card' + (checked ? ' checked' : '');
+      const warningHtml = act.warning ? '<span class="warning">stop if sharp pain</span>' : '';
+      const videoKey = currentDay + '-' + act.id;
+      const isOpen = openVideos[videoKey];
+
+      let videoActionsHtml = '';
+      if (act.videoId) {
+        videoActionsHtml = '<div class="video-actions">' +
+          '<button class="play-btn" data-video-key="' + videoKey + '">' +
+            (isOpen ? '✕ Close video' : '▶ Play guided session') +
+          '</button>' +
+          (act.fallback ? '<a class="video-link" href="' + act.fallback + '" target="_blank" rel="noopener">Open on YouTube</a>' : '') +
+        '</div>';
+      } else if (act.fallback) {
+        videoActionsHtml = '<a class="video-link" href="' + act.fallback + '" target="_blank" rel="noopener">▶ Watch demo</a>';
+      }
+
+      const embedHtml = isOpen && act.videoId ?
+        '<div class="video-embed"><iframe src="https://www.youtube.com/embed/' + act.videoId + '?rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>' : '';
+
+      card.innerHTML =
+        '<div class="checkbox ' + (checked ? 'checked' : '') + '" data-id="' + act.id + '"></div>' +
+        '<div class="card-content">' +
+          '<div class="card-title">' + act.title + ' ' + warningHtml + '</div>' +
+          '<div class="card-desc">' + act.desc + '</div>' +
+          videoActionsHtml +
+          embedHtml +
+        '</div>';
+      card.querySelector('.checkbox').addEventListener('click', () => toggleActivity(act.id));
+      const playBtn = card.querySelector('.play-btn');
+      if (playBtn) playBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleVideo(videoKey); });
+      container.appendChild(card);
+    });
+  });
+
+  // ----- EVENING CHECK-IN -----
+  container.appendChild(buildCheckinCard('evening'));
+
+  renderOverview();
+}
+
+function buildCheckinCard(type) {
+  const card = document.createElement('div');
+  const ci = (checkins[currentDay] || {})[type];
+  const done = !!ci;
+  card.className = 'checkin-card ' + type + (done ? ' complete' : '');
+
+  const key = currentDay + '-' + type;
+  const open = openCheckins[key] || (!done);
+
+  const titleText = type === 'morning' ? '🌄 Morning check-in' : '🌙 Evening check-in';
+  const subText = type === 'morning' ? 'Right after waking, before yoga' : 'Before bed, after stretches';
+
+  const header = document.createElement('div');
+  header.className = 'checkin-header';
+  header.innerHTML =
+    '<div>' +
+      '<h3>' + titleText + '</h3>' +
+      '<div style="font-size:0.82em; color:#6b7a8f;">' + subText + '</div>' +
+    '</div>' +
+    '<span class="checkin-status ' + (done ? 'done' : 'pending') + '">' + (done ? '✓ Done' : 'Pending') + '</span>';
+  card.appendChild(header);
+
+  if (done && !open) {
+    const summary = document.createElement('div');
+    summary.className = 'checkin-summary';
+    let parts = [
+      '<span>Pain: <strong>' + ci.pain + '/10</strong></span>',
+      '<span>Mood: <strong>' + ci.mood + '/10</strong></span>',
+      '<span>Stiffness: <strong>' + ci.stiffness + '/10</strong></span>'
+    ];
+    if (type === 'morning' && ci.sleep != null) {
+      parts.push('<span>Sleep: <strong>' + ci.sleep + '/10</strong></span>');
+    }
+    summary.innerHTML = parts.join('');
+    card.appendChild(summary);
+    if (ci.notes) {
+      const n = document.createElement('div');
+      n.style.cssText = 'margin-top:8px; font-size:0.88em; color:#4a5868; font-style:italic;';
+      n.textContent = '"' + ci.notes + '"';
+      card.appendChild(n);
+    }
+    const editBtn = document.createElement('button');
+    editBtn.className = 'checkin-toggle-btn';
+    editBtn.style.marginTop = '10px';
+    editBtn.textContent = 'Edit';
+    editBtn.addEventListener('click', () => { openCheckins[key] = true; render(); });
+    card.appendChild(editBtn);
+  } else {
+    // form
+    const form = document.createElement('div');
+    form.className = 'checkin-form open';
+
+    const initial = ci || {
+      pain: 5, mood: 5, stiffness: 5, sleep: 5, notes: ''
+    };
+
+    const metrics = [
+      { key: 'pain', label: 'Pain level', icon: '⚡', reverse: false, leftLbl: 'None', rightLbl: 'Severe' },
+      { key: 'mood', label: 'Mood / energy', icon: '🌤️', reverse: true, leftLbl: 'Low', rightLbl: 'Great' },
+      { key: 'stiffness', label: 'Stiffness', icon: '🧊', reverse: false, leftLbl: 'Loose', rightLbl: 'Very stiff' }
+    ];
+    if (type === 'morning') {
+      metrics.push({ key: 'sleep', label: 'Sleep quality (last night)', icon: '😴', reverse: true, leftLbl: 'Poor', rightLbl: 'Excellent' });
+    }
+
+    metrics.forEach(m => {
+      const row = document.createElement('div');
+      row.className = 'metric-row' + (m.reverse ? ' reverse' : '');
+      row.innerHTML =
+        '<label>' +
+          '<span>' + m.icon + ' ' + m.label + '</span>' +
+          '<span class="value" id="val-' + key + '-' + m.key + '">' + initial[m.key] + '</span>' +
+        '</label>' +
+        '<input type="range" min="0" max="10" step="1" value="' + initial[m.key] + '" data-metric="' + m.key + '">' +
+        '<div class="scale-labels"><span>' + m.leftLbl + '</span><span>' + m.rightLbl + '</span></div>';
+      const slider = row.querySelector('input');
+      slider.addEventListener('input', (e) => {
+        document.getElementById('val-' + key + '-' + m.key).textContent = e.target.value;
+      });
+      form.appendChild(row);
+    });
+
+    const notesRow = document.createElement('div');
+    notesRow.className = 'metric-row';
+    notesRow.innerHTML =
+      '<label><span>📝 Notes (optional)</span></label>' +
+      '<textarea class="checkin-textarea" data-metric="notes" placeholder="' +
+      (type === 'morning' ? 'How does your back feel? Anything to flag?' : 'How did the day go? Did anything help or aggravate?') +
+      '">' + (initial.notes || '') + '</textarea>';
+    form.appendChild(notesRow);
+
+    const saveBtn = document.createElement('button');
+    saveBtn.className = 'save-checkin-btn';
+    saveBtn.textContent = done ? 'Update check-in' : 'Save check-in';
+    saveBtn.addEventListener('click', () => {
+      const data = { ts: new Date().toISOString() };
+      form.querySelectorAll('input[type="range"]').forEach(s => {
+        data[s.dataset.metric] = parseInt(s.value);
+      });
+      const notesEl = form.querySelector('textarea');
+      data.notes = notesEl ? notesEl.value.trim() : '';
+      if (!checkins[currentDay]) checkins[currentDay] = {};
+      checkins[currentDay][type] = data;
+      saveCheckins();
+      openCheckins[key] = false;
+      render();
+    });
+    form.appendChild(saveBtn);
+
+    if (done) {
+      const cancelBtn = document.createElement('button');
+      cancelBtn.className = 'checkin-toggle-btn';
+      cancelBtn.style.cssText = 'margin-top:8px; width:100%;';
+      cancelBtn.textContent = 'Cancel';
+      cancelBtn.addEventListener('click', () => { openCheckins[key] = false; render(); });
+      form.appendChild(cancelBtn);
+    }
+    card.appendChild(form);
+  }
+
+  return card;
+}
+
+function toggleVideo(key) { openVideos[key] = !openVideos[key]; render(); }
+function toggleActivity(id) {
+  if (!progress[currentDay]) progress[currentDay] = {};
+  progress[currentDay][id] = !progress[currentDay][id];
+  saveProgress();
+  render();
+}
+
+// ===== OVERVIEW =====
+function renderOverview() {
+  const grid = document.getElementById('overview-grid');
+  grid.innerHTML = '';
+  for (let d = 1; d <= 28; d++) {
+    const dp = progress[d] || {};
+    const acts = buildDay(d);
+    const done = acts.filter(a => dp[a.id]).length;
+    const isComplete = done === acts.length;
+    const cell = document.createElement('div');
+    cell.className = 'overview-day' + (d === currentDay ? ' current' : '') + (isComplete ? ' complete' : '');
+    cell.innerHTML = '<div class="day-num">' + d + '</div><div class="day-progress">' + done + '/' + acts.length + '</div>';
+    cell.addEventListener('click', () => {
+      currentDay = d;
+      openVideos = {};
+      openCheckins = {};
+      saveDay();
+      switchTab('today');
+      render();
+    });
+    grid.appendChild(cell);
+  }
+}
+
+// ===== PROGRESS TAB =====
+function renderProgress() {
+  const container = document.getElementById('progress-content');
+  container.innerHTML = '';
+
+  // Collect data
+  const data = [];
+  for (let d = 1; d <= 28; d++) {
+    const ci = checkins[d] || {};
+    if (ci.morning || ci.evening) {
+      data.push({
+        day: d,
+        amPain: ci.morning ? ci.morning.pain : null,
+        amMood: ci.morning ? ci.morning.mood : null,
+        amStiff: ci.morning ? ci.morning.stiffness : null,
+        sleep: ci.morning ? ci.morning.sleep : null,
+        pmPain: ci.evening ? ci.evening.pain : null,
+        pmMood: ci.evening ? ci.evening.mood : null,
+        pmStiff: ci.evening ? ci.evening.stiffness : null
+      });
+    }
+  }
+
+  if (data.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'progress-card';
+    empty.innerHTML = '<div class="empty-state">📊 No check-in data yet.<br><br>Once you complete a few morning and evening check-ins, this tab will show your trends and patterns.</div>';
+    container.appendChild(empty);
+    return;
+  }
+
+  // ---- SUMMARY STATS ----
+  const summaryCard = document.createElement('div');
+  summaryCard.className = 'progress-card';
+  summaryCard.innerHTML = '<h3>📈 At a glance</h3><div class="subtitle">' + data.length + ' day' + (data.length === 1 ? '' : 's') + ' of data</div>';
+  summaryCard.appendChild(buildSummaryStats(data));
+  container.appendChild(summaryCard);
+
+  // ---- PAIN CHART ----
+  const painCard = document.createElement('div');
+  painCard.className = 'progress-card';
+  painCard.innerHTML = '<h3>⚡ Pain over time</h3><div class="subtitle">Lower is better. Morning vs evening.</div>';
+  painCard.appendChild(buildLineChart(data, [
+    { key: 'amPain', color: '#f0c060', label: 'Morning pain' },
+    { key: 'pmPain', color: '#7d6ce0', label: 'Evening pain' }
+  ], 0, 10));
+  container.appendChild(painCard);
+
+  // ---- ALL METRICS CHART ----
+  const allCard = document.createElement('div');
+  allCard.className = 'progress-card';
+  allCard.innerHTML = '<h3>📊 All metrics (evening)</h3><div class="subtitle">Tracks how end-of-day measures shift.</div>';
+  allCard.appendChild(buildLineChart(data, [
+    { key: 'pmPain', color: '#e08080', label: 'Pain' },
+    { key: 'pmStiff', color: '#5b8def', label: 'Stiffness' },
+    { key: 'pmMood', color: '#4caf50', label: 'Mood' }
+  ], 0, 10));
+  container.appendChild(allCard);
+
+  // ---- INSIGHTS ----
+  const insightsCard = document.createElement('div');
+  insightsCard.className = 'progress-card';
+  insightsCard.innerHTML = '<h3>💡 Insights</h3><div class="subtitle">Patterns based on your data so far.</div>';
+  const insights = generateInsights(data);
+  insights.forEach(ins => {
+    const box = document.createElement('div');
+    box.className = 'insight-box ' + (ins.type || '');
+    box.innerHTML = '<strong>' + ins.title + '</strong>' + ins.body;
+    insightsCard.appendChild(box);
+  });
+  container.appendChild(insightsCard);
+}
+
+function buildSummaryStats(data) {
+  const wrap = document.createElement('div');
+  wrap.className = 'summary-stats';
+
+  const stats = [
+    { key: 'pmPain', label: 'Avg evening pain', invert: true },
+    { key: 'amPain', label: 'Avg morning pain', invert: true },
+    { key: 'pmStiff', label: 'Avg stiffness (PM)', invert: true },
+    { key: 'sleep', label: 'Avg sleep quality', invert: false }
+  ];
+
+  stats.forEach(s => {
+    const vals = data.map(d => d[s.key]).filter(v => v != null);
+    if (vals.length === 0) return;
+    const avg = vals.reduce((a,b) => a+b, 0) / vals.length;
+
+    // compare first half vs second half
+    let change = null;
+    if (vals.length >= 4) {
+      const mid = Math.floor(vals.length / 2);
+      const first = vals.slice(0, mid);
+      const second = vals.slice(mid);
+      const firstAvg = first.reduce((a,b)=>a+b,0)/first.length;
+      const secondAvg = second.reduce((a,b)=>a+b,0)/second.length;
+      change = secondAvg - firstAvg;
+    }
+
+    let changeHtml = '';
+    if (change != null) {
+      const isImproving = s.invert ? change < -0.3 : change > 0.3;
+      const isWorsening = s.invert ? change > 0.3 : change < -0.3;
+      const cls = isImproving ? 'improving' : (isWorsening ? 'worsening' : 'flat');
+      const arrow = change > 0 ? '↑' : (change < 0 ? '↓' : '→');
+      changeHtml = '<div class="change ' + cls + '">' + arrow + ' ' + Math.abs(change).toFixed(1) + (isImproving ? ' improving' : (isWorsening ? ' worse' : ' stable')) + '</div>';
+    }
+
+    const stat = document.createElement('div');
+    stat.className = 'summary-stat';
+    stat.innerHTML =
+      '<div class="label">' + s.label + '</div>' +
+      '<div class="value">' + avg.toFixed(1) + '</div>' +
+      changeHtml;
+    wrap.appendChild(stat);
+  });
+
+  return wrap;
+}
+
+function buildLineChart(data, series, minY, maxY) {
+  const wrap = document.createElement('div');
+  const w = 800, h = 220;
+  const pad = { l: 30, r: 10, t: 10, b: 28 };
+  const innerW = w - pad.l - pad.r;
+  const innerH = h - pad.t - pad.b;
+
+  // x scale by day (1..28)
+  const days = data.map(d => d.day);
+  const minDay = 1, maxDay = 28;
+  const xFor = (day) => pad.l + ((day - minDay) / (maxDay - minDay)) * innerW;
+  const yFor = (v) => pad.t + (1 - (v - minY) / (maxY - minY)) * innerH;
+
+  let svg = '<svg class="chart" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none">';
+
+  // gridlines
+  for (let i = 0; i <= 10; i += 2) {
+    const y = yFor(i);
+    svg += '<line x1="' + pad.l + '" y1="' + y + '" x2="' + (w-pad.r) + '" y2="' + y + '" stroke="#e8edf3" stroke-width="1"/>';
+    svg += '<text x="' + (pad.l - 6) + '" y="' + (y + 4) + '" text-anchor="end" font-size="10" fill="#8a96a8">' + i + '</text>';
+  }
+  // x-axis ticks every 7 days
+  for (let d = 1; d <= 28; d += 7) {
+    const x = xFor(d);
+    svg += '<line x1="' + x + '" y1="' + pad.t + '" x2="' + x + '" y2="' + (h-pad.b) + '" stroke="#f0f3f8" stroke-width="1"/>';
+    svg += '<text x="' + x + '" y="' + (h - pad.b + 16) + '" text-anchor="middle" font-size="10" fill="#8a96a8">D' + d + '</text>';
+  }
+  const xLast = xFor(28);
+  svg += '<line x1="' + xLast + '" y1="' + pad.t + '" x2="' + xLast + '" y2="' + (h-pad.b) + '" stroke="#f0f3f8" stroke-width="1"/>';
+  svg += '<text x="' + xLast + '" y="' + (h - pad.b + 16) + '" text-anchor="middle" font-size="10" fill="#8a96a8">D28</text>';
+
+  // each series
+  series.forEach(s => {
+    const points = data.filter(d => d[s.key] != null).map(d => ({ x: xFor(d.day), y: yFor(d[s.key]) }));
+    if (points.length === 0) return;
+    if (points.length > 1) {
+      const path = points.map((p, i) => (i === 0 ? 'M' : 'L') + p.x + ',' + p.y).join(' ');
+      svg += '<path d="' + path + '" stroke="' + s.color + '" stroke-width="2.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>';
+    }
+    points.forEach(p => {
+      svg += '<circle cx="' + p.x + '" cy="' + p.y + '" r="3.5" fill="' + s.color + '" stroke="white" stroke-width="1.5"/>';
+    });
+  });
+
+  svg += '</svg>';
+  wrap.innerHTML = svg;
+
+  // legend
+  const legend = document.createElement('div');
+  legend.className = 'chart-legend';
+  series.forEach(s => {
+    legend.innerHTML += '<span class="legend-item"><span class="swatch" style="background:' + s.color + '"></span>' + s.label + '</span>';
+  });
+  wrap.appendChild(legend);
+
+  return wrap;
+}
+
+function generateInsights(data) {
+  const insights = [];
+  if (data.length < 3) {
+    insights.push({
+      title: 'Keep checking in',
+      body: 'A few more days of data will start to show patterns. Aim for at least 5-7 days before drawing conclusions.',
+      type: ''
+    });
+    return insights;
+  }
+
+  // 1. Pain trend (overall)
+  const evePain = data.map(d => d.pmPain).filter(v => v != null);
+  if (evePain.length >= 4) {
+    const mid = Math.floor(evePain.length / 2);
+    const firstAvg = evePain.slice(0, mid).reduce((a,b)=>a+b,0) / mid;
+    const secondAvg = evePain.slice(mid).reduce((a,b)=>a+b,0) / (evePain.length - mid);
+    const diff = firstAvg - secondAvg;
+    if (diff > 0.7) {
+      insights.push({
+        title: '🎉 Pain is trending down',
+        body: 'Your evening pain has dropped by an average of ' + diff.toFixed(1) + ' points across the programme so far. That\'s the body learning it\'s safe to relax.',
+        type: 'positive'
+      });
+    } else if (diff < -0.7) {
+      insights.push({
+        title: '⚠️ Pain is trending up',
+        body: 'Evening pain has risen by ' + Math.abs(diff).toFixed(1) + ' points. Worth pausing to check: too much intensity, a flare, or external stress? Consider a flare-day protocol or speaking to a physio.',
+        type: 'warning'
+      });
+    } else {
+      insights.push({
+        title: 'Pain is fairly stable',
+        body: 'Evening pain hasn\'t shifted dramatically yet (' + (diff >= 0 ? '-' : '+') + Math.abs(diff).toFixed(1) + '). Chronic patterns take 2-3 weeks of consistent input. Stay with it.',
+        type: ''
+      });
+    }
+  }
+
+  // 2. Morning vs evening pattern
+  const pairs = data.filter(d => d.amPain != null && d.pmPain != null);
+  if (pairs.length >= 4) {
+    const eveningBetter = pairs.filter(d => d.pmPain < d.amPain - 0.5).length;
+    const eveningWorse = pairs.filter(d => d.pmPain > d.amPain + 0.5).length;
+    const total = pairs.length;
+    if (eveningBetter / total > 0.6) {
+      insights.push({
+        title: '🌙 Pain typically eases through the day',
+        body: 'In ' + Math.round(eveningBetter/total*100) + '% of days, your evening pain is meaningfully lower than morning. The programme — particularly yoga and movement — is doing what it should. Morning stiffness is the hardest part.',
+        type: 'positive'
+      });
+    } else if (eveningWorse / total > 0.6) {
+      insights.push({
+        title: '🌅 Mornings are easier than evenings',
+        body: 'On most days the back winds up through the day rather than easing. This usually points to sitting/posture load or the day being more aggravating than the routine. Tighten the hourly breathing reset and check sitting setup.',
+        type: 'warning'
+      });
+    }
+  }
+
+  // 3. Sleep impact
+  const sleepData = data.filter(d => d.sleep != null && d.amPain != null);
+  if (sleepData.length >= 5) {
+    const goodSleep = sleepData.filter(d => d.sleep >= 7);
+    const poorSleep = sleepData.filter(d => d.sleep <= 4);
+    if (goodSleep.length >= 2 && poorSleep.length >= 2) {
+      const goodSleepPain = goodSleep.reduce((a,b) => a+b.amPain, 0) / goodSleep.length;
+      const poorSleepPain = poorSleep.reduce((a,b) => a+b.amPain, 0) / poorSleep.length;
+      const diff = poorSleepPain - goodSleepPain;
+      if (diff > 1) {
+        insights.push({
+          title: '😴 Sleep quality strongly affects pain',
+          body: 'Your morning pain after good sleep averages ' + goodSleepPain.toFixed(1) + '/10, vs ' + poorSleepPain.toFixed(1) + '/10 after poor sleep. Protecting sleep is one of your highest-leverage moves.',
+          type: 'positive'
+        });
+      }
+    }
+  }
+
+  // 4. Best and worst day
+  if (data.length >= 5) {
+    const withPain = data.filter(d => d.pmPain != null);
+    if (withPain.length >= 3) {
+      const sorted = [...withPain].sort((a,b) => a.pmPain - b.pmPain);
+      const best = sorted[0];
+      const worst = sorted[sorted.length - 1];
+      if (worst.pmPain - best.pmPain >= 2) {
+        insights.push({
+          title: '📅 Best vs worst day',
+          body: 'Day ' + best.day + ' was your lowest pain (' + best.pmPain + '/10), Day ' + worst.day + ' your highest (' + worst.pmPain + '/10). Look at your notes for those days — what was different? Patterns in habits, sleep, stress and activity often hide there.',
+          type: ''
+        });
+      }
+    }
+  }
+
+  // 5. Mood-pain correlation
+  const moodPain = data.filter(d => d.pmMood != null && d.pmPain != null);
+  if (moodPain.length >= 6) {
+    // simple Pearson-ish
+    const n = moodPain.length;
+    const sumX = moodPain.reduce((a,b) => a+b.pmMood, 0);
+    const sumY = moodPain.reduce((a,b) => a+b.pmPain, 0);
+    const meanX = sumX/n, meanY = sumY/n;
+    let num = 0, dx2 = 0, dy2 = 0;
+    moodPain.forEach(d => {
+      const dx = d.pmMood - meanX;
+      const dy = d.pmPain - meanY;
+      num += dx*dy;
+      dx2 += dx*dx;
+      dy2 += dy*dy;
+    });
+    const r = (dx2 && dy2) ? num / Math.sqrt(dx2*dy2) : 0;
+    if (r < -0.5) {
+      insights.push({
+        title: '🌤️ Better mood = lower pain',
+        body: 'There\'s a strong negative correlation between mood and pain in your data — better mood days have lower pain. This is the central sensitisation piece in action: the nervous system is connected. Stress management is real medicine here.',
+        type: 'positive'
+      });
+    }
+  }
+
+  return insights;
+}
+
+// ===== TABS =====
+function switchTab(name) {
+  document.querySelectorAll('nav.tabs button').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === name);
+  });
+  ['today','overview','progress','tips'].forEach(t => {
+    document.getElementById('tab-' + t).classList.toggle('hidden', t !== name);
+  });
+  if (name === 'progress') renderProgress();
+}
+
+document.querySelectorAll('nav.tabs button').forEach(b => {
+  b.addEventListener('click', () => switchTab(b.dataset.tab));
+});
+
+document.getElementById('prev-day').addEventListener('click', () => {
+  if (currentDay > 1) { currentDay--; openVideos = {}; openCheckins = {}; saveDay(); render(); }
+});
+document.getElementById('next-day').addEventListener('click', () => {
+  if (currentDay < 28) { currentDay++; openVideos = {}; openCheckins = {}; saveDay(); render(); }
+});
+
+document.getElementById('reset-btn').addEventListener('click', () => {
+  if (confirm('Reset all progress, check-ins, and return to Day 1? This cannot be undone.')) {
+    progress = {};
+    checkins = {};
+    currentDay = 1;
+    openVideos = {};
+    openCheckins = {};
+    startDate = new Date().toISOString();
+    try { localStorage.setItem(STORAGE_KEYS.startDate, startDate); } catch(e) {}
+    saveProgress();
+    saveCheckins();
+    saveDay();
+    render();
+  }
+});
+
+loadState();
+render();
+</script>
+</body>
+</html>
